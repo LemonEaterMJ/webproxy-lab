@@ -1,0 +1,51 @@
+<!-- Make Dynamic request adder.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+
+
+    <title>LemonEater | Adder.com</title>
+
+    <script>
+        function newurl() {
+            let num1 = $("#nbox01").val();
+            let num2 = $("#nbox02").val();
+            
+            $.ajax({
+                type : "GET",
+                url: `/cgi-bin/adder?${num1}&${num2}`,
+                data: {}, 
+                success : function (response) {
+                    let num3 = Number(num1) + Number(num2)
+                    let result_html = `<p>
+                        ${num1} + ${num2} = ${num3}</p>`;
+                    $('#div-result').append(result_html);
+                }
+                
+            })
+        }
+    </script>
+
+</head>
+<body>
+    <title>Welcome to add.com: </title>
+    <p>The Internet addition portal.</p>
+    <div class="var-boxes">
+        <input type="number" class="num-box" id="nbox01" placeholder="Enter a Number">
+        <input type="number" class="num-box" id="nbox02" placeholder="Enter a Number">
+    </div>
+    <button onclick="newurl()" id="btn-add" type="button" >ADD!</button>
+    <div id = "div-result"></div>
+</body>
+</html>

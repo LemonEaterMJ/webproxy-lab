@@ -177,10 +177,14 @@ int parse_uri(char *uri, char *filename, char *cgiargs) {
 	if (!strstr(uri, "cgi-bin")) {	// STATIC 
 		strcpy(cgiargs, "");		// clear arguments
 		strcpy(filename, ".");	
-		strcat(filename, uri);		// convert URI to pathname 
+		strcat(filename, uri);		// convert URI to pathname
+		
 		if (uri[strlen(uri) - 1] == '/') {	// if ends with /
 			// convert URI to default home.html
 			strcat(filename, "home.html");
+		}
+		if (!strcmp(uri, "/adder")) {
+			strcpy(filename, "adder.html");
 		}
 		return 1;
 	} else {						// DYNAMIC
