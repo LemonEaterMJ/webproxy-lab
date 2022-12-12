@@ -244,11 +244,13 @@ void serve_static(int fd, char *filename, int filesize) {
 	srcfd = Open(filename, O_RDONLY, 0);
 
 	/* malloc file to virtual memory(source ptr) */
-	srcp = Mmap(0, filesize, PROT_READ, MAP_PRIVATE, srcfd, 0);
+	// srcp = Mmap(0, filesize, PROT_READ, MAP_PRIVATE, srcfd, 0);
+	srcp = (char *)malloc(filesize *sizeof(char));
+	Rio_readn(srcfd, srcp, filesize);
 	Close(srcfd);						// Close file 
 	Rio_writen(fd, srcp, filesize);		// write srcp to fd
-	Munmap(srcp, filesize);				// free
-
+	// Munmap(srcp, filesize);				// free
+	free(srcp);
 }
 
 
@@ -257,11 +259,12 @@ void serve_static(int fd, char *filename, int filesize) {
 /* 
  * FUNCTION : get_filetype()
  * parse filename and filetype 
- * this version of tiny supports 5 filetypes : 
+ * this version of tiny supports 6 filetypes : 
  * 		html : text/html	
  * 		image : image/png, image/jpeg
  * 		gif : image/gif
  * 		text : text/plain
+ * 		mpg : video/mpg
  */
 void get_filetype(char *filename, char *filetype) {
 	if (strstr(filename, ".html")) {
@@ -272,6 +275,8 @@ void get_filetype(char *filename, char *filetype) {
 		strcpy(filetype, "image/png");
 	} else if (strstr(filename, ".jpg")) {
 		strcpy(filetype, "image/jpeg");
+	} else if (strstr(filename, ".mp4")) {
+		strcpy(filetype, "video/mp4");
 	} else {	// plain text
 		strcpy(filetype, "text/plain");
 	}
